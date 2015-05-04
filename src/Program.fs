@@ -23,6 +23,19 @@ let main argv =
     
     let icon = resources.GetObject("tray") :?> Icon
 
+    let showSplash () =
+        let splashForm = new Form()
+        let background = resources.GetObject("popup_background") :?> Image
+        splashForm.Width <- 470
+        splashForm.Height <- 241
+        splashForm.BackgroundImage <- background
+        splashForm.FormBorderStyle <- FormBorderStyle.None
+        splashForm.StartPosition <- FormStartPosition.CenterScreen
+        splashForm.Show()
+        Thread.Sleep(2500)
+        splashForm.Close()
+        
+
     use tray = new NotifyIcon()
 
     use menu = new ContextMenuStrip()
@@ -78,7 +91,7 @@ let main argv =
         // Prevent echo
         if data <> myId.ToByteArray () then
             do! Async.SwitchToContext uiContext
-            do showHey ()
+            do showSplash ()
             do! Async.SwitchToThreadPool ()
 
         do! receive ()
